@@ -19,6 +19,12 @@ DICTIONARY = {
     "олар": "PRON",
     "көп": "ADV",
     "жаса": "VERB",
+    "жұмыс": "NOUN",
+    "жаса": "VERB",
+    "айжан": "PROPN",
+    "жақсы": "ADJ",
+    "отыр": "VERB"
+}
 
     # Үстеулер
     "бүгін": "ADV",
@@ -263,4 +269,5 @@ if text:
     else:
         for it in unknowns:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
+
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
