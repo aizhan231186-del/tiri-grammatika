@@ -217,7 +217,7 @@ if text:
 
     # Әр сөзді талдау
     for w in raw_words:
-        root, sufs = split_root_suffixes(w, SUFFIXES)
+        root, sufs = layered_split(w, DICTIONARY)
         pos = guess_pos(root, sufs)
         analysis.append({
             "orig": w,
@@ -255,6 +255,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
