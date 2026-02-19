@@ -161,7 +161,7 @@ def split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]
 
     w = normalize_word(word)
     if w in DICTIONARY:
-    return w, []
+        return w, []
 
     # Ұзын қосымшалар алдымен тексерілсін
     suffixes = sorted(suffixes, key=len, reverse=True)
@@ -279,6 +279,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
