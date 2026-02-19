@@ -175,7 +175,7 @@ def split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]
         if w in DICTIONARY:
             break
 
-        for suf in suffixes:
+for suf in suffixes:
     if w.endswith(suf) and len(w) > len(suf) + 1:
         candidate = w[:-len(suf)]
 
@@ -290,6 +290,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
