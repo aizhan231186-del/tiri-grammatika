@@ -171,24 +171,7 @@ def split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]
                 w = w[: -len(suf)]
                 found.insert(0, suf)  # реті сақталсын
                 changed = True
-                breakdef split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]:
-    w = normalize_word(word)
-
-    suffixes = sorted(suffixes, key=len, reverse=True)  # ✅ ұзындары алдымен
-
-    found = []
-    changed = True
-    while changed:
-        changed = False
-        for suf in suffixes:
-            if w.endswith(suf) and len(w) > len(suf) + 1:
-                w = w[:-len(suf)]
-                found.insert(0, suf)
-                changed = True
                 break
-
-    return w, found
-
     return w, found
 
 def guess_pos(root: str, suffixes_found: list[str]) -> str:
@@ -288,6 +271,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
