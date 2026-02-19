@@ -74,7 +74,7 @@ SUFFIX_GROUPS = {
 
     "dative": ["ға", "ге", "қа", "ке"],
 
-    "accusative": ["ны", "ні", "ды", "ді", "ты", "ті"],
+    "accusative":
 
     "locative": ["да", "де", "та", "те"],
 
@@ -160,7 +160,8 @@ def normalize_word(w: str) -> str:
 def split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]:
 
     w = normalize_word(word)
-    found = []
+    if w in DICTIONARY
+    return w, []
 
     # Ұзын қосымшалар алдымен тексерілсін
     suffixes = sorted(suffixes, key=len, reverse=True)
@@ -278,6 +279,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
