@@ -24,6 +24,21 @@ DICTIONARY = {
     "айжан": "PROPN",
     "жақсы": "ADJ",
     "отыр": "VERB","бүгін":"ADV",
+    
+POS_KZ = {
+    "NOUN": "Зат есім",
+    "ADJ": "Сын есім",
+    "VERB": "Етістік",
+    "ADV": "Үстеу",
+    "PRON": "Есімдік",
+    "NUM": "Сан есім",
+    "CONJ": "Шылау (жалғаулық)",
+    "POSTP": "Шылау (септеулік)",
+    "PART": "Демеулік",
+    "ADP": "Шылау",
+    "PROPN": "Жалқы есім",
+    "INTJ": "Одағай",
+    "UNKNOWN": "Белгісіз",
 
     # Үстеулер
     "кеше": "ADV",
@@ -261,7 +276,7 @@ if text:
     for i, it in enumerate(analysis):
         role = guess_role(it["pos"], it["suffixes"], i, last_verb_index)
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "-"
-        pos_text = it["pos"]
+        pos_text = POS_KZ.get(it["pos"], it["pos"])
         table.append({
             "Сөз": it["orig"],
             "Түбір": it["root"] if it["root"] else "-",
@@ -283,6 +298,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
