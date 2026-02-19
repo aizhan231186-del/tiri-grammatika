@@ -156,7 +156,35 @@ def normalize_word(w: str) -> str:
     w = w.strip()
     w = re.sub(r"[^\wәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)  # қазақ әріптерін сақтаймыз
     return w.lower()
+def layered_split(word: str, dictionary: dict):
+    """Түбір+қосымшаны тұрақты бөлу: тек сөздік дәлел болса ғана кеседі."""
+    w = normalize_word(word)
+    found = []
 
+    if w in dictionary:
+        return w, found
+
+    # Ұзын қосымшалар алдымен тексерілсін
+    suffixes = sorted(SUFFIXES, key=len, reverse=True)
+
+    changed = True
+    while changed:
+        changed = False
+
+        if w in dictionary:
+            break
+
+        for suf in suffixes:
+            if w.endswith(suf) and len(w) > len(suf) + 1:
+                cand = w[:-len(suf)]
+                # Дәлел: кандидат-түбір сөздікте болса ғана қабылдаймыз
+                if cand in dictionary:
+                    w = cand
+                    found.insert(0, suf)
+                    changed = True
+                    break
+
+    return w, found
 
 def guess_pos(root: str, suffixes_found: list[str]) -> str:
     """Сөз табын жуықтау"""
@@ -255,6 +283,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
