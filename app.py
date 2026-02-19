@@ -158,24 +158,29 @@ def normalize_word(w: str) -> str:
     return w.lower()
 
 def split_root_suffixes(word: str, suffixes: list[str]) -> tuple[str, list[str]]:
-    """
-    Сөзден соңынан қосымшаларды біртіндеп жұлып алады.
-    Мыс: "сабағыммен" -> ("сабақ", ["ым","мен"])
-    """
+
     w = normalize_word(word)
     found = []
-    changed = True
 
+    # Ұзын қосымшалар алдымен тексерілсін
+    suffixes = sorted(suffixes, key=len, reverse=True)
+
+    changed = True
     while changed:
         changed = False
+
+        # Егер түбір сөздікте бар болса – тоқтаймыз
+        if w in DICTIONARY:
+            break
+
         for suf in suffixes:
             if w.endswith(suf) and len(w) > len(suf) + 1:
-                w = w[: -len(suf)]
-                found.insert(0, suf)  # реті сақталсын
+                w = w[:-len(suf)]
+                found.insert(0, suf)
                 changed = True
                 break
-    return w, found
 
+    return w, found
 def guess_pos(root: str, suffixes_found: list[str]) -> str:
     """Сөз табын жуықтау"""
     if root in DICTIONARY:
@@ -273,6 +278,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
