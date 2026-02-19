@@ -74,7 +74,7 @@ SUFFIX_GROUPS = {
 
     "dative": ["ға", "ге", "қа", "ке"],
 
-    "accusative":
+    "accusative": [],
 
     "locative": ["да", "де", "та", "те"],
 
@@ -279,6 +279,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
