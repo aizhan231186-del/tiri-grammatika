@@ -197,9 +197,10 @@ def layered_split(word: str, dictionary: dict):
     """Түбір+қосымшаны тұрақты бөлу: тек сөздік дәлел болса ғана кеседі."""
     w = normalize_word(word)
     found = []
+
     # Реттік сан есім жұрнағын бөлмейміз: екінші, үшінші, төртінші...
-if w.endswith(("інші", "ншы")):
-    return w, []
+    if w.endswith(("інші", "ншы")):
+        return w, []
 
     if w in dictionary:
         return w, found
@@ -217,8 +218,7 @@ if w.endswith(("інші", "ншы")):
         for suf in suffixes:
             if w.endswith(suf) and len(w) > len(suf) + 1:
                 cand = w[:-len(suf)]
-                # Дәлел: кандидат-түбір сөздікте болса ғана қабылдаймыз
-                if cand in dictionary or len(cand) > 2:
+                if cand in dictionary:
                     w = cand
                     found.insert(0, suf)
                     changed = True
@@ -343,6 +343,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
