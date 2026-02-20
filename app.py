@@ -197,6 +197,9 @@ def layered_split(word: str, dictionary: dict):
     """Түбір+қосымшаны тұрақты бөлу: тек сөздік дәлел болса ғана кеседі."""
     w = normalize_word(word)
     found = []
+    # Реттік сан есім жұрнағын бөлмейміз: екінші, үшінші, төртінші...
+if w.endswith(("інші", "ншы")):
+    return w, []
 
     if w in dictionary:
         return w, found
@@ -226,6 +229,9 @@ def layered_split(word: str, dictionary: dict):
 def guess_pos(root: str, suffixes_found: list[str]) -> str:
     """Сөз табын жуықтау"""
     if root in DICTIONARY:
+# Реттік сан есім: -інші/-ншы
+if root.endswith(("інші", "ншы")):
+    return "NUM" 
         return DICTIONARY[root]
 
     # Егер жіктік жалғауға ұқсас болса → етістік болуы мүмкін
@@ -277,6 +283,8 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
     # Пысықтауыш — үстеу
     if pos == "ADV":
         return "Пысықтауыш"
+    if pos in ("ADJ", "NUM") and index < last_verb_index:
+    return "Анықтауыш"
 
     return "Белгісіз"
 
@@ -331,6 +339,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
