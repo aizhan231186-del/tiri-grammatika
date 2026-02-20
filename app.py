@@ -227,7 +227,18 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     noun_like = {"лар", "лер", "дар", "дер", "тар", "тер", "ға", "ге", "қа", "ке", "да", "де", "та", "те", "дан", "ден", "тан", "тен", "мен", "пен", "бен"}
     if any(s in noun_like for s in suffixes_found):
         return "NOUN"
-
+# Реттік сан есімдер (-ншы/-нші/-ыншы/-інші)
+    ordinal_like = {"ншы", "нші", "ыншы", "інші"}
+    if any(s in ordinal_like for s in suffixes_found):
+        return "NUM"
+# Жатыс септігі (-нда/-нде/-ында/-інде)
+    locative_like = {"нда", "нде", "ында", "інде"}
+    if any(s in locative_like for s in suffixes_found):
+        return "NOUN"
+ # Туынды зат есім (-лық/-лік/-дық/-дік/-тық/-тік)
+    noun_deriv = {"лық", "лік", "дық", "дік", "тық", "тік"}
+    if any(s in noun_deriv for s in suffixes_found):
+        return "NOUN"       
     return "UNKNOWN"
 
 def find_last_verb_index(items: list[dict]) -> int:
@@ -310,6 +321,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
