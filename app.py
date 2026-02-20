@@ -228,16 +228,20 @@ if w.endswith(("інші", "ншы")):
 
 def guess_pos(root: str, suffixes_found: list[str]) -> str:
     """Сөз табын жуықтау"""
+
     if root in DICTIONARY:
-# Реттік сан есім: -інші/-ншы
-if root.endswith(("інші", "ншы")):
-    return "NUM" 
         return DICTIONARY[root]
 
-    # Егер жіктік жалғауға ұқсас болса → етістік болуы мүмкін
-    verb_like = {"мын", "мін", "быз", "біз", "сың", "сің", "сыз", "сіз"}
+    # Реттік сан есім
+    if root.endswith(("інші", "ншы")):
+        return "NUM"
+
+    # Егер жіктік жалғау болса
+    verb_like = {"мын", "мін", "быз", "біз", "сың", "сің"}
     if any(s in verb_like for s in suffixes_found):
         return "VERB"
+
+    return "UNKNOWN"
 
     # Көптік/септік көп болса → зат есім болуы мүмкін
     noun_like = {"лар", "лер", "дар", "дер", "тар", "тер", "ға", "ге", "қа", "ке", "да", "де", "та", "те", "дан", "ден", "тан", "тен", "мен", "пен", "бен"}
@@ -339,6 +343,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
