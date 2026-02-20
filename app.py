@@ -1,4 +1,4 @@
-.import streamlit as st
+import streamlit as st
 import re
 
 st.title("Тірі грамматика")
@@ -321,6 +321,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
