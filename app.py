@@ -102,22 +102,29 @@ POS_KZ = {
 
 SUFFIX_GROUPS = {
     "plural": ["лар", "лер", "дар", "дер", "тар", "тер"],
+    "poss_1sg": ["ым","ім"],
+    "poss_2sg": ["ың","ің"],
+    "poss_3sg": ["ы","і","сы","сі"],
+    "poss_1pl": ["ымыз","іміз"],
+    "poss_2pl": ["сыңдар","сіңдер","сыңыз","сіңіз"],  # ықшамдап алуға болады
+    "genitive": ["ның","нің","дың","дің","тың","тің"],
+    "dative": ["ға","ге","қа","ке"],
+    "accusative": ["ны","ні","ды","ді","ты","ті"],
+    "locative": ["да","де","та","те"],
+    "ablative": ["дан","ден","тан","тен"],
+    "instrumental": ["мен","пен","бен"],
+
+    # етістікке
+    "past": ["ды","ді","ты","ті"],          # бар-ды-қ
+    "verb_personal_1pl": ["мыз","міз"],     # бар-ды-қ (мұнда -қ өзі көптік жақ)
+    "converb": ["ып","іп","п"],
+    "participle": ["ған","ген","қан","кен"],
+}
     "possessive": [
         "ымыз", "іміз", "мыз", "міз",
         "ың", "ің", "ң",
         "ы", "і", "сы", "сі"
     ],
-
-    "genitive": ["ның", "нің", "дың", "дің", "тың", "тің"],
-
-    "dative": ["ға", "ге", "қа", "ке"],
-
-    "locative": ["да", "де", "та", "те"],
-
-    "ablative": ["дан", "ден", "тан", "тен"],
-
-    "instrumental": ["мен", "пен", "бен"],
-
     "verb_personal": [
         "мын", "мін", "бын", "бін", "пын", "пін",
         "мыз", "міз",
@@ -253,6 +260,41 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
         return "VERB"
 
     return "UNKNOWN"
+    def extract_features(pos: str, suffixes: list[str]) -> dict:
+        feats = {}
+
+        # NOUN features
+        if pos == "NOUN":
+            if any(s in SUFFIX_GROUPS["plural"] for s in suffixes):
+                feats["Number"] = "Plur"
+        if any(s in SUFFIX_GROUPS["poss_1pl"] for s in suffixes):
+            feats["Poss"] = "1Pl"
+        elif any(s in SUFFIX_GROUPS["poss_1sg"] for s in suffixes):
+            feats["Poss"] = "1Sg"
+        elif any(s in SUFFIX_GROUPS["poss_2sg"] for s in suffixes):
+            feats["Poss"] = "2Sg"
+        elif any(s in SUFFIX_GROUPS["poss_3sg"] for s in suffixes):
+            feats["Poss"] = "3Sg"
+
+        if any(s in SUFFIX_GROUPS["genitive"] for s in suffixes):
+            feats["Case"] = "Gen"
+        elif any(s in SUFFIX_GROUPS["dative"] for s in suffixes):
+            feats["Case"] = "Dat"
+        elif any(s in SUFFIX_GROUPS["accusative"] for s in suffixes):
+            feats["Case"] = "Acc"
+        elif any(s in SUFFIX_GROUPS["locative"] for s in suffixes):
+            feats["Case"] = "Loc"
+        elif any(s in SUFFIX_GROUPS["ablative"] for s in suffixes):
+            feats["Case"] = "Abl"
+        elif any(s in SUFFIX_GROUPS["instrumental"] for s in suffixes):
+            feats["Case"] = "Ins"
+
+    # VERB features
+    if pos == "VERB":
+        if any(s in SUFFIX_GROUPS["past"] for s in suffixes):
+            feats["Tense"] = "Past"
+
+    return feats
 
     # Көптік/септік көп болса → зат есім болуы мүмкін
     noun_like = {"лар", "лер", "дар", "дер", "тар", "тер", "ға", "ге", "қа", "ке", "да", "де", "та", "те", "дан", "ден", "тан", "тен", "мен", "пен", "бен"}
@@ -331,17 +373,19 @@ if text:
     raw_words = text.split()
     analysis = []
 
-    # Әр сөзді талдау
-    for w in raw_words:
-        root, sufs = layered_split(w, DICTIONARY)
-        pos = guess_pos(root, sufs)
-        analysis.append({
-            "orig": w,
-            "root": root,
-            "suffixes": sufs,
-            "pos": pos,
-        })
+# Әр сөзді талдау
+for w in raw_words:
+    root, sufs = layered_split(w, DICTIONARY)
+    pos = guess_pos(root, sufs)
+    feats = extract_features(pos, sufs)   
 
+    analysis.append({
+        "orig": w,
+        "root": root,
+        "suffixes": sufs,
+        "pos": pos,
+        "feats": feats,                  
+    })
     last_verb_index = find_last_verb_index(analysis)
 
     # Кесте үшін мәлімет
@@ -373,6 +417,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
