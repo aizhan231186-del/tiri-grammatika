@@ -323,26 +323,20 @@ def find_last_verb_index(items: list[dict]) -> int:
         if it["pos"] == "VERB":
             idx = i
     return idx
-def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list):
+def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
         return "Баяндауыш"
-    # Егер екі етістік қатар келсе (ойнап жүр, барып келді) → күрделі баяндауыш
-    if pos == "VERB" and index < last_verb_index and items[index + 1]["pos"] == "VERB":
-        return "Баяндауыш"  
-    # Жатыс септік (да/де/та/те) -> пысықтауыш
-    if any(s in ["да","де","та","те"] for s in suffixes_found):
-        return "Пысықтауыш"
-    # Бастауыш — сөйлем басындағы есімдік немесе зат есім
+
+    # Бастауыш — сөйлем басындағы есімдік/зат есім
     if index == 0 and pos in ("PRON", "NOUN", "PROPN"):
         return "Бастауыш"
 
-    # Сын есім зат есімнің алдында тұрса → анықтауыш
-    if pos == "ADJ":
-        return "Анықтауыш"
-    # Егер зат есім баяндауыштан бұрын тұрса -> бастауыш
-    if pos in ("NOUN", "PROPN") and index < last_verb_index:
-        return "Бастауыш"
+    # Сын есім зат есімнің алдында тұрса -> анықтауыш (қорғаныс: index+1 шектен аспасын)
+    if pos == "ADJ" and index + 1 < len(items):
+        if items[index + 1]["pos"] in ("NOUN", "PROPN"):
+            return "Анықтауыш"
+
     # Толықтауыш — табыс/барыс септік
     object_suffixes = {"ны", "ні", "ға", "ге", "қа", "ке"}
     if any(s in object_suffixes for s in suffixes_found):
@@ -352,22 +346,6 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
     if pos == "ADV":
         return "Пысықтауыш"
 
-    # Қалған ADJ/NUM көбіне анықтауыш болып келеді (етістіктен бұрын)
-    if pos in ("ADJ", "NUM") and index < last_verb_index:
-        return "Анықтауыш"
-    # Көмектес септік (мен/пен/бен) → пысықтауыш
-    if any(s in ["мен","пен","бен"] for s in suffixes_found):
-        return "Пысықтауыш"
-    # Барыс септік (қа/ке/ға/ге)
-    if any(s in ["қа","ке","ға","ге"] for s in suffixes_found):
-        # соңғы етістік (баяндауыш) түбірін аламыз
-        last_word = items[last_verb_index]["root"]
-
-        # қозғалыс етістіктері болса -> мекен/бағыт пысықтауыш болуы мүмкін
-        if last_word in ["бар", "кел", "кет", "жүр", "шық"]:
-            return "Пысықтауыш"
-    else:
-        return "Толықтауыш"
     return "Белгісіз"
 def extract_features(pos, sufs):
     return {}
@@ -397,11 +375,9 @@ if text:
         })
     last_verb_index = find_last_verb_index(analysis)
 
-    # Кесте үшін мәлімет
     table = []
-    
     for i, it in enumerate(analysis):
-        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, items)
+        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)  # <-- МІНЕ ОСЫ ЖЕР
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
         pos_text = POS_KZ.get(it["pos"], it["pos"])
 
@@ -411,7 +387,7 @@ if text:
             "Қосымша(лар)": suf_text,
             "Сөз табы": pos_text,
             "Сөйлем мүшесі": role
-         })
+    })
 
     st.subheader("Талдау нәтижесі")
     st.table(table)
@@ -426,6 +402,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
