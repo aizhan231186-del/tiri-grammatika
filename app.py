@@ -357,16 +357,16 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
 
     # Әр сөзді талдау
         for w in raw_words:
-        root, sufs = layered_split(w, DICTIONARY)
-        pos = guess_pos(root, sufs)
-        feats = extract_features(pos, sufs)   
+            root, sufs = layered_split(w, DICTIONARY)
+            pos = guess_pos(root, sufs)
+            feats = extract_features(pos, sufs)   
 
-        analysis.append({
-        "orig": w,
-        "root": root,
-        "suffixes": sufs,
-        "pos": pos,
-        "feats": feats,                  
+            analysis.append({
+                "orig": w,
+                "root": root,
+                "suffixes": sufs,
+                "pos": pos,
+                "feats": feats,                  
     })
     last_verb_index = find_last_verb_index(analysis)
 
@@ -399,6 +399,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
