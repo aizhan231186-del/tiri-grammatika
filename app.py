@@ -212,7 +212,12 @@ def layered_split(word: str, dictionary: dict):
         return w, found
 
     # Ұзын қосымшалар алдымен тексерілсін
-    suffixes = sorted(SUFFIXES, key=len, reverse=True)
+    # Барлық қосымшаларды SUFFIX_GROUPS-тен жинаймыз
+    all_suffixes = []
+    for group in SUFFIX_GROUPS.values():
+        all_suffixes.extend(group)
+  
+    suffixes = sorted(all_suffixes, key=len, reverse=True)
 
     changed = True
     while changed:
@@ -357,6 +362,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
