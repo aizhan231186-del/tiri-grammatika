@@ -305,7 +305,19 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
     # Қалған ADJ/NUM көбіне анықтауыш болып келеді (етістіктен бұрын)
     if pos in ("ADJ", "NUM") and index < last_verb_index:
         return "Анықтауыш"
+    # Көмектес септік (мен/пен/бен) → пысықтауыш
+    if any(s in ["мен","пен","бен"] for s in suffixes_found):
+        return "Пысықтауыш"
+    # Барыс септік (қа/ке/ға/ге)
+    if any(s in ["қа","ке","ға","ге"] for s in suffixes_found):
+        # соңғы етістік (баяндауыш) түбірін аламыз
+        last_word = items[last_verb_index]["root"]
 
+        # қозғалыс етістіктері болса -> мекен/бағыт пысықтауыш болуы мүмкін
+        if last_word in ["бар", "кел", "кет", "жүр", "шық"]:
+            return "Пысықтауыш"
+    else:
+        return "Толықтауыш"
     return "Белгісіз"
 
 # =========================================================
@@ -361,6 +373,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
