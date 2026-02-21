@@ -348,10 +348,10 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
 # =========================================================
 # UI
 # =========================================================
-text = st.text_input("Сөйлем жазыңыз:")
+    text = st.text_input("Сөйлем жазыңыз:")
 
-if text:
-    st.write("Сіз жаздыңыз:", text)
+    if text:
+        st.write("Сіз жаздыңыз:", text)
         raw_words = text.split()
         analysis = []
 
@@ -399,6 +399,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
