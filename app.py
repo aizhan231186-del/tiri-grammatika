@@ -64,6 +64,8 @@ DICTIONARY = {
 "дос": "NOUN",
 "серуен": "NOUN",
 "айы": "NOUN",
+    "бала": "NOUN",
+    "дала": "NOUN",
 "серуенде": "VERB",
     "жел": "NOUN",
 
@@ -81,6 +83,7 @@ DICTIONARY = {
     "қатыс": "VERB",
     "қатысу": "VERB",
     "бол": "VERB",
+    "ойна": "VERB",
     
     # Сын есім түбірлері
     "қызық": "ADJ",
@@ -247,7 +250,17 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     verb_like = {"мын", "мін", "быз", "біз", "сың", "сің"}
     if any(s in verb_like for s in suffixes_found):
         return "VERB"
+    # Көптік жалғау -> зат есім
+    if any(s in ["лар","лер","дар","дер","тар","тер"] for s in sufs):
+        return "NOUN"
 
+    # Жатыс септік -> көбіне зат есім (далада, мектепте)
+    if any(s in ["да","де","та","те"] for s in sufs):
+        return "NOUN"
+
+    # Көсемше -> етістік (ойнап/оқып/келіп)
+    if any(s in ["п","ып","іп"] for s in sufs):
+        return "VERB"
     return "UNKNOWN"
     def extract_features(pos: str, suffixes: list[str]) -> dict:
         feats = {}
@@ -410,6 +423,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
