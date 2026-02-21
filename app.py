@@ -352,12 +352,11 @@ text = st.text_input("Сөйлем жазыңыз:")
 
 if text:
     st.write("Сіз жаздыңыз:", text)
-
-    raw_words = text.split()
-    analysis = []
+        raw_words = text.split()
+        analysis = []
 
     # Әр сөзді талдау
-    for w in raw_words:
+        for w in raw_words:
         root, sufs = layered_split(w, DICTIONARY)
         pos = guess_pos(root, sufs)
         feats = extract_features(pos, sufs)   
@@ -373,7 +372,7 @@ if text:
 
     # Кесте үшін мәлімет
     table = []
-    for i, it in enumerate(analysis):
+         for i, it in enumerate(analysis):
 
         role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
@@ -400,6 +399,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
