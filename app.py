@@ -298,7 +298,7 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     return "UNKNOWN"
 
 def find_last_verb_index(items: list[dict]) -> int:
-   """Сөйлемдегі соңғы етістік индексін табу"""
+    """Сөйлемдегі соңғы етістік индексін табу"""
     idx = -1
     for i, it in enumerate(items):
         if it["pos"] == "VERB":
@@ -399,6 +399,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: in t, last_verb_index
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
