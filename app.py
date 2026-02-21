@@ -129,6 +129,10 @@ SUFFIX_GROUPS = {
 
     "participle": ["ған", "ген", "қан", "кен"]
 }    # Қажетті түбірлер (скриндегі сөйлемге)
+# Барлық suffix-терді бір тізімге жинау
+SUFFIXES = []
+for group in SUFFIX_GROUPS.values():
+    SUFFIXES.extend(group)
 DICTIONARY.update({
     "біз": "PRON",      # есімдік
     "дос": "NOUN",      # зат есім
@@ -353,6 +357,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
