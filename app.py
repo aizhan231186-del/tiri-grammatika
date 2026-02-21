@@ -112,8 +112,6 @@ SUFFIX_GROUPS = {
 
     "dative": ["ға", "ге", "қа", "ке"],
 
-    "accusative": [],
-
     "locative": ["да", "де", "та", "те"],
 
     "ablative": ["дан", "ден", "тан", "тен"],
@@ -204,40 +202,36 @@ def normalize_word(w: str) -> str:
     w = re.sub(r"[^\wәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)  # қазақ әріптерін сақтаймыз
     return w.lower()
 def layered_split(word: str, dictionary: dict):
-    """Түбір+қосымшаны тұрақты бөлу: тек сөздік дәлел болса ғана кеседі."""
+    """Түбір + қосымшаны қабаттап бөлу (аралық формалар сөздікте болмаса да кеседі)."""
     w = normalize_word(word)
     found = []
 
-    # Реттік сан есім жұрнағын бөлмейміз: екінші, үшінші, төртінші...
+    # Реттік сан есім жұрнағын бөлмейміз (екінші, үшінші...)
     if w.endswith(("інші", "ншы")):
         return w, []
 
-    if w in dictionary:
-        return w, found
-
-    # Ұзын қосымшалар алдымен тексерілсін
     # Барлық қосымшаларды SUFFIX_GROUPS-тен жинаймыз
     all_suffixes = []
     for group in SUFFIX_GROUPS.values():
         all_suffixes.extend(group)
-  
-    suffixes = sorted(all_suffixes, key=len, reverse=True)
+
+    # Ұзын қосымша алдымен тексерілсін
+    suffixes = sorted(set(all_suffixes), key=len, reverse=True)
 
     changed = True
     while changed:
         changed = False
 
-        if w in dictionary:
-            break
-
         for suf in suffixes:
             if w.endswith(suf) and len(w) > len(suf) + 1:
+                # кесіп көреміз
                 cand = w[:-len(suf)]
-                if cand in dictionary:
-                    w = cand
-                    found.insert(0, suf)
-                    changed = True
-                    break
+
+                # Қосымшаны алып тастай береміз (cand сөздікте болмаса да)
+                w = cand
+                found.insert(0, suf)
+                changed = True
+                break
 
     return w, found
 
@@ -365,6 +359,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
