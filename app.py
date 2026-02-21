@@ -285,32 +285,29 @@ def find_last_verb_index(items: list[dict]) -> int:
             idx = i
     return idx
 def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
-
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
         return "Баяндауыш"
-    # Бастауыш – баяндауыштан бұрын тұрған атау септіктегі зат есім/есімдік
-    if pos in ("PRON", "NOUN") and index < last_verb_index:
-        # Егер жалғаулары жоқ болса (атау септік)
-        if not suffixes_found:
-            return "Бастауыш"
 
     # Бастауыш — сөйлем басындағы есімдік немесе зат есім
-    if index == 0 and pos in ("PRON", "NOUN"):
+    if index == 0 and pos in ("PRON", "NOUN", "PROPN"):
         return "Бастауыш"
+
     # Сын есім зат есімнің алдында тұрса → анықтауыш
     if pos == "ADJ" and index + 1 < len(items):
         if items[index + 1]["pos"] in ("NOUN", "PROPN"):
             return "Анықтауыш"
 
     # Толықтауыш — табыс/барыс септік
-    object_suffixes = {"ды","ді","ты","ті","ны","ні","ға","ге","қа","ке"}
+    object_suffixes = {"ды", "ді", "ты", "ті", "ны", "ні", "ға", "ге", "қа", "ке"}
     if any(s in object_suffixes for s in suffixes_found):
         return "Толықтауыш"
 
     # Пысықтауыш — үстеу
     if pos == "ADV":
         return "Пысықтауыш"
+
+    # Қалған ADJ/NUM көбіне анықтауыш болып келеді (етістіктен бұрын)
     if pos in ("ADJ", "NUM") and index < last_verb_index:
         return "Анықтауыш"
 
@@ -343,8 +340,7 @@ if text:
     # Кесте үшін мәлімет
     table = []
     for i, it in enumerate(analysis):
-        def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
-        suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "-"
+    
         pos_text = POS_KZ.get(it["pos"], it["pos"])
         table.append({
             "Сөз": it["orig"],
@@ -367,6 +363,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
