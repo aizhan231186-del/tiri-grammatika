@@ -340,15 +340,19 @@ if text:
     # Кесте үшін мәлімет
     table = []
     for i, it in enumerate(analysis):
-    
+
+        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
+
+        suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
         pos_text = POS_KZ.get(it["pos"], it["pos"])
+
         table.append({
             "Сөз": it["orig"],
-            "Түбір": it["root"] if it["root"] else "-",
+            "Түбір": it["root"] if it["root"] else "—",
             "Қосымша(лар)": suf_text,
             "Сөз табы": pos_text,
             "Сөйлем мүшесі": role
-        })
+    })
 
     st.subheader("Талдау нәтижесі")
     st.table(table)
@@ -363,6 +367,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
