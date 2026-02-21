@@ -356,13 +356,13 @@ if text:
     raw_words = text.split()
     analysis = []
 
-# Әр сөзді талдау
-for w in raw_words:
-    root, sufs = layered_split(w, DICTIONARY)
-    pos = guess_pos(root, sufs)
-    feats = extract_features(pos, sufs)   
+    # Әр сөзді талдау
+    for w in raw_words:
+        root, sufs = layered_split(w, DICTIONARY)
+        pos = guess_pos(root, sufs)
+        feats = extract_features(pos, sufs)   
 
-    analysis.append({
+        analysis.append({
         "orig": w,
         "root": root,
         "suffixes": sufs,
@@ -400,6 +400,7 @@ for w in raw_words:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
