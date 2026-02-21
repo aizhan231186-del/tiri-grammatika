@@ -268,8 +268,7 @@ def find_last_verb_index(items: list[dict]) -> int:
         if it["pos"] == "VERB":
             idx = i
     return idx
-
-def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int) -> str:
+def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
 
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
@@ -323,7 +322,7 @@ if text:
     # Кесте үшін мәлімет
     table = []
     for i, it in enumerate(analysis):
-        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index)
+        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "-"
         pos_text = POS_KZ.get(it["pos"], it["pos"])
         table.append({
@@ -347,6 +346,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
