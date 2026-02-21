@@ -275,6 +275,11 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
         return "Баяндауыш"
+    # Бастауыш – баяндауыштан бұрын тұрған атау септіктегі зат есім/есімдік
+    if pos in ("PRON", "NOUN") and index < last_verb_index:
+        # Егер жалғаулары жоқ болса (атау септік)
+        if not suffixes_found:
+            return "Бастауыш"
 
     # Бастауыш — сөйлем басындағы есімдік немесе зат есім
     if index == 0 and pos in ("PRON", "NOUN"):
@@ -348,6 +353,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
