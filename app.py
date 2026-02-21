@@ -298,13 +298,13 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     return "UNKNOWN"
 
 def find_last_verb_index(items: list[dict]) -> int:
-    """Сөйлемдегі соңғы етістік индексін табу"""
+   """Сөйлемдегі соңғы етістік индексін табу"""
     idx = -1
     for i, it in enumerate(items):
         if it["pos"] == "VERB":
             idx = i
     return idx
-def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
+def guess_role(pos: str, suffixes_found: list[str], index: in t, last_verb_index: int, items: list[dict]) -> str:
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
         return "Баяндауыш"
@@ -355,7 +355,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
         raw_words = text.split()
         analysis = []
 
-    # Әр сөзді талдау
+        # Әр сөзді талдау
         for w in raw_words:
             root, sufs = layered_split(w, DICTIONARY)
             pos = guess_pos(root, sufs)
@@ -367,7 +367,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
                 "suffixes": sufs,
                 "pos": pos,
                 "feats": feats,                  
-    })
+            })
     last_verb_index = find_last_verb_index(analysis)
 
     # Кесте үшін мәлімет
@@ -399,6 +399,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
