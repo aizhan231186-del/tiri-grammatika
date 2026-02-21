@@ -41,6 +41,7 @@ DICTIONARY = {
     "кеше": "ADV",
     "ертең": "ADV",
     "қазір": "ADV",
+    "бүгін": "ADV",
 
     # Зат есімдер
     "сабақ": "NOUN", 
@@ -55,7 +56,7 @@ DICTIONARY = {
 "ораза": "NOUN",
 "алғашқы": "ADJ",
 "күн": "NOUN", 
-"оразан": "NOUN",
+"колледж": "NOUN",
 "алғашқ": "ADJ",
 "ай": "NOUN",
 "күн": "NOUN",
@@ -78,6 +79,8 @@ DICTIONARY = {
     "оқы": "VERB",
     "қатыс": "VERB",
     "қатысу": "VERB",
+    # Сын есім түбірлері
+    "қызық": "ADJ",
  } 
 POS_KZ = {
     "NOUN": "Зат есім",
@@ -100,6 +103,7 @@ POS_KZ = {
 
 SUFFIX_GROUPS = {
     "plural": ["лар", "лер", "дар", "дер", "тар", "тер"],
+SUFFIX_GROUPS["past"] = ["ды","ді","ты","ті"]
 
     "possessive": [
         "ымыз", "іміз", "мыз", "міз",
@@ -339,7 +343,7 @@ if text:
     # Кесте үшін мәлімет
     table = []
     for i, it in enumerate(analysis):
-        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
+        def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "-"
         pos_text = POS_KZ.get(it["pos"], it["pos"])
         table.append({
@@ -363,6 +367,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
