@@ -329,7 +329,15 @@ def layered_split(word: str, dictionary: dict):
                         cand = cand[:-1] + "к"
 
                 w = cand
-                found.insert(0, suf)
+                # "йды/йді" және "ады/еді" сияқты құрама қосымшаларды бөлу
+                if suf in ("йды", "йді"):
+                    found.insert(0, "ды" if suf == "йды" else "ді")
+                    found.insert(0, "й")
+                elif suf in ("ады", "еді"):
+                    found.insert(0, "ды" if suf == "ады" else "ді")
+                    found.insert(0, "а" if suf == "ады" else "е")
+                else:
+                    found.insert(0, suf)
                 changed = True
                 break
 
@@ -528,6 +536,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
