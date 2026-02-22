@@ -366,7 +366,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
     # Егер соңғы етістіктің алдында тұрған зат есім болса → бастауыш
     if (
         pos == "NOUN"
-        and index == last_verb_index - 1:
+        and index == last_verb_index - 1
         and "DAT" not in suffixes_found
     ):
         return "Бастауыш" 
@@ -452,6 +452,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
