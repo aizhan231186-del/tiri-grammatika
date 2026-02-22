@@ -140,6 +140,20 @@ SUFFIX_GROUPS = {
     "converb": ["ып","іп","п"],
     "participle": ["ған","ген","қан","кен"],
 }
+CASE_MAP = {
+    "genitive": "Ілік септік",
+    "dative": "Барыс септік",
+    "accusative": "Табыс септік",
+    "locative": "Жатыс септік",
+    "ablative": "Шығыс септік",
+    "instrumental": "Көмектес септік",
+}
+
+TENSE_MAP = {
+    "past": "Өткен шақ",
+    "converb": "Көсемше",
+    "participle": "Есімше",
+}
 # Қажетті түбірлер (скриндегі сөйлемге)
 # Барлық suffix-терді бір тізімге жинау
 SUFFIXES = []
@@ -232,7 +246,7 @@ def layered_split(word: str, dictionary: dict):
 
     # Барлық қосымшаларды SUFFIX_GROUPS-тен жинаймыз
     all_suffixes = []
-    for group in SUFFIX_GROUPS.values():
+    for group_name, group in SUFFIX_GROUPS.items():
         all_suffixes.extend(group)
 
     # Ұзын қосымша алдымен тексерілсін
@@ -455,6 +469,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
