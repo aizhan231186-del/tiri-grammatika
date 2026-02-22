@@ -237,6 +237,9 @@ def layered_split(word: str, dictionary: dict):
                 found.insert(0, suf)
                 changed = True
                 break
+    # 🔥 Нормализация (ұнай → ұна)
+    if w.endswith("й"):
+        w = w[:-1]
 
     return w, found
 
@@ -413,6 +416,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
