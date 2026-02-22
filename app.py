@@ -308,6 +308,14 @@ def layered_split(word: str, dictionary: dict):
                     found.insert(0, "ы")
                     changed = True
                     break
+
+                # ✅ Б/П дыбыс алмасуын кері қайтару (кітаб -> кітап)
+                if cand.endswith("б") and (cand[:-1] + "п") in dictionary:
+                    cand = cand[:-1] + "п"
+
+                # ✅ Ғ/Қ дыбыс алмасуы
+                if cand.endswith("ғ") and (cand[:-1] + "қ") in dictionary:
+                    cand = cand[:-1] + "қ"
                 w = cand
                 # "йды/йді" және "ады/еді" сияқты құрама қосымшаларды бөлу
                 if suf in ("йды", "йді"):
@@ -516,6 +524,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
