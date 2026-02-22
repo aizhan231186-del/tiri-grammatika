@@ -185,34 +185,38 @@ def format_suffixes(suffixes):
             result.append(suf)
     return " + ".join(result)
 
-def detect_category(suffixes):
+def detect_category(pos, suffixes):
     categories = []
 
+    # 1) ЕТІСТІК болса: "ды/ді/ты/ті" — септік емес, етістік форманты!
+    if pos == "VERB":
+        # ауыспалы осы шақ (3-жақ): ұна-й-ды / бар-а-ды / кел-е-ді
+        if any(x in suffixes for x in ["й", "а", "е"]) and any(x in suffixes for x in ["ды", "ді"]):
+            categories.append("Ауыспалы осы шақ (3-жақ)")
+        # өткен шақтың қарапайым белгісі (керек болса)
+        elif any(x in suffixes for x in ["ды", "ді", "ты", "ті"]):
+            categories.append("Өткен шақ")
+
+        # көсемше/есімше (қалдырғың келсе)
+        if any(x in suffixes for x in ["ып", "іп", "п"]):
+            categories.append("Көсемше")
+        if any(x in suffixes for x in ["ған", "ген", "қан", "кен"]):
+            categories.append("Есімше")
+
+        return " + ".join(dict.fromkeys(categories)) if categories else "—"
+
+    # 2) ЕТІСТІК ЕМЕС болса (зат есім/есімдік): септіктерді осында қара
     for suf in suffixes:
-        # 1) Септік тегтері (DAT, GEN...)
         if suf in CASE_MAP:
             categories.append(CASE_MAP[suf])
-
-        # 2) Етістік категория тегтері (егер кейін енгізсең)
         elif suf in TENSE_MAP:
             categories.append(TENSE_MAP[suf])
-
-        # 3) Тәуелдік (беткі форма арқылы)
-        elif suf in ["ым","ім","ың","ің","ы","і","сы","сі","ымыз","іміз","ыңдар","іңдер"]:
+        elif suf in ["ы","і","сы","сі","м","ң","ңыз","ңіз","ымыз","іміз"]:
             categories.append("Тәуелдік жалғау")
-
-        # 4) Көптік
         elif suf in ["лар","лер","дар","дер","тар","тер"]:
             categories.append("Көптік жалғау")
 
-        # 5) Етістік: ауыспалы осы шақ (3-жақ)
-        elif suf in ["ды", "ді"] and any(x in suffixes for x in ["а", "е", "й"]):
-            categories.append("Ауыспалы осы шақ (3-жақ)")
-
-    # қайталанбасын десең:
-    categories = list(dict.fromkeys(categories))
-
-    return " + ".join(categories) if categories else "—"
+    return " + ".join(dict.fromkeys(categories)) if categories else "—"
 # Қажетті түбірлер (скриндегі сөйлемге)
 # Барлық suffix-терді бір тізімге жинау
 SUFFIXES = []
@@ -511,7 +515,7 @@ if text:
         role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
 
         suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
-        category_text = detect_category(it["suffixes"])   # ✅ МІНЕ ОСЫ
+        category_text = detect_category(it["pos"], it["suffixes"]) # ✅ МІНЕ ОСЫ
         pos_text = POS_KZ.get(it["pos"], it["pos"])
 
         table.append({
@@ -536,6 +540,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
