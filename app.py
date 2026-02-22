@@ -192,21 +192,19 @@ def format_suffixes(suffixes):
 def detect_category(pos, suffixes):
     categories = []
 
-    # 1) ЕТІСТІК болса: "ды/ді/ты/ті" — септік емес, етістік форманты!
+    # 1) Егер ЕТІСТІК болса: "ды/ді/ты/ті" — септік емес, етістік форманты!
     if pos == "VERB":
-       if "у" in suffixes:
-           categories.append("Тұйық етістік")
-       if any(x in suffixes for x in ["да","де","та","те"]):
-           categories.append("Жатыс септік")
-    
         # ауыспалы осы шақ (3-жақ): ұна-й-ды / бар-а-ды / кел-е-ді
-        if any(x in suffixes for x in ["й", "а", "е"]) and any(x in suffixes for x in ["ды", "ді"]):
+        has_link = any(x in suffixes for x in ["й", "а", "е"])
+        has_di   = any(x in suffixes for x in ["ды", "ді"])
+        has_ti   = any(x in suffixes for x in ["ты", "ті"])
+
+        if has_link and has_di:
             categories.append("Ауыспалы осы шақ (3-жақ)")
-        # өткен шақтың қарапайым белгісі (керек болса)
-        elif any(x in suffixes for x in ["ды", "ді", "ты", "ті"]):
+        elif has_di or has_ti:
             categories.append("Өткен шақ")
 
-        # көсемше/есімше (қалдырғың келсе)
+        # көсемше/есімше (қаласаң қалдырасың)
         if any(x in suffixes for x in ["ып", "іп", "п"]):
             categories.append("Көсемше")
         if any(x in suffixes for x in ["ған", "ген", "қан", "кен"]):
@@ -218,11 +216,9 @@ def detect_category(pos, suffixes):
     for suf in suffixes:
         if suf in CASE_MAP:
             categories.append(CASE_MAP[suf])
-        elif suf in TENSE_MAP:
-            categories.append(TENSE_MAP[suf])
-        elif suf in ["ы","і","сы","сі","м","ң","ңыз","ңіз","ымыз","іміз"]:
+        elif suf in ["ы", "і", "сы", "сі", "м", "ң", "ңыз", "ңіз", "ымыз", "іміз"]:
             categories.append("Тәуелдік жалғау")
-        elif suf in ["лар","лер","дар","дер","тар","тер"]:
+        elif suf in ["лар", "лер", "дар", "дер", "тар", "тер"]:
             categories.append("Көптік жалғау")
 
     return " + ".join(dict.fromkeys(categories)) if categories else "—"
@@ -549,6 +545,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
