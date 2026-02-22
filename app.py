@@ -164,6 +164,35 @@ def format_suffixes(suffixes):
         else:
             result.append(suf)
     return " + ".join(result)
+
+def detect_category(suffixes):
+    categories = []
+
+    for suf in suffixes:
+        # 1) Септік тегтері (DAT, GEN...)
+        if suf in CASE_MAP:
+            categories.append(CASE_MAP[suf])
+
+        # 2) Етістік категория тегтері (егер кейін енгізсең)
+        elif suf in TENSE_MAP:
+            categories.append(TENSE_MAP[suf])
+
+        # 3) Тәуелдік (беткі форма арқылы)
+        elif suf in ["ым","ім","ың","ің","ы","і","сы","сі","ымыз","іміз","ыңдар","іңдер"]:
+            categories.append("Тәуелдік жалғау")
+
+        # 4) Көптік
+        elif suf in ["лар","лер","дар","дер","тар","тер"]:
+            categories.append("Көптік жалғау")
+
+        # 5) Етістік: ауыспалы осы шақ (ұнай-ды / кел-е-ді / бар-а-ды)
+        elif suf in ["йды","йді","ады","еді"]:
+            categories.append("Ауыспалы осы шақ (3-жақ)")
+
+    # қайталанбасын десең:
+    categories = list(dict.fromkeys(categories))
+
+    return " + ".join(categories) if categories else "—"
 # Қажетті түбірлер (скриндегі сөйлемге)
 # Барлық suffix-терді бір тізімге жинау
 SUFFIXES = []
@@ -454,14 +483,17 @@ if text:
 
     table = []
     for i, it in enumerate(analysis):
-        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)  # <-- МІНЕ ОСЫ ЖЕР
-        suf_text = format_suffixes(it["suffixes"]) if it["suffixes"] else ""
+        role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)
+
+        suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
+        category_text = detect_category(it["suffixes"])   # ✅ МІНЕ ОСЫ
         pos_text = POS_KZ.get(it["pos"], it["pos"])
 
         table.append({
             "Сөз": it["orig"],
             "Түбір": it["root"] if it["root"] else "—",
             "Қосымша(лар)": suf_text,
+            "Грамматикалық категория": category_text,      # ✅ ЖАҢА БАҒАН
             "Сөз табы": pos_text,
             "Сөйлем мүшесі": role
     })
@@ -479,6 +511,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
