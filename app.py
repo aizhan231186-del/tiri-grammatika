@@ -154,6 +154,16 @@ TENSE_MAP = {
     "converb": "Көсемше",
     "participle": "Есімше",
 }
+def format_suffixes(suffixes):
+    result = []
+    for suf in suffixes:
+        if suf in CASE_MAP:
+            result.append(CASE_MAP[suf])
+        elif suf in TENSE_MAP:
+            result.append(TENSE_MAP[suf])
+        else:
+            result.append(suf)
+    return " + ".join(result)
 # Қажетті түбірлер (скриндегі сөйлемге)
 # Барлық suffix-терді бір тізімге жинау
 SUFFIXES = []
@@ -445,7 +455,7 @@ if text:
     table = []
     for i, it in enumerate(analysis):
         role = guess_role(it["pos"], it["suffixes"], i, last_verb_index, analysis)  # <-- МІНЕ ОСЫ ЖЕР
-        suf_text = "+".join(it["suffixes"]) if it["suffixes"] else "—"
+        suf_text = format_suffixes(it["suffixes"]) if it["suffixes"] else ""
         pos_text = POS_KZ.get(it["pos"], it["pos"])
 
         table.append({
@@ -469,6 +479,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
