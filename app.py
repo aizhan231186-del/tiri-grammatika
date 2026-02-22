@@ -210,6 +210,10 @@ def detect_category(pos, suffixes):
             categories.append("Көсемше")
         if any(x in suffixes for x in ["ған", "ген", "қан", "кен"]):
             categories.append("Есімше")
+        # ✅ Тұйық етістікке септік жалғанса: орындау+да, бару+ға, келу+ден
+        for s in suffixes:
+            if s in CASE_MAP:
+                categories.append(CASE_MAP[s])
 
         return " + ".join(dict.fromkeys(categories)) if categories else "—"
 
@@ -524,6 +528,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
