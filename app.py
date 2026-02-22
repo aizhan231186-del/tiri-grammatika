@@ -227,6 +227,7 @@ def detect_category(pos, suffixes):
 SUFFIXES = []
 for group in SUFFIX_GROUPS.values():
     SUFFIXES.extend(group)
+SUFFIXES = sorted(SUFFIXES, key=len, reverse=True)   
 DICTIONARY.update({
     "біз": "PRON",      # есімдік
     "дос": "NOUN",      # зат есім
@@ -558,6 +559,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
