@@ -73,6 +73,11 @@ DICTIONARY = {
 "серуенде": "VERB",
     "жел": "NOUN",
     "студент": "NOUN",
+    "әдебиет": "NOUN",
+    "кітап": "NOUN",
+    "тапсырма": "NOUN",
+})
+    
     
 
     # Жалқы есімдер (мысал)
@@ -92,6 +97,7 @@ DICTIONARY = {
     "қатысу": "VERB",
     "бол": "VERB",
     "ойна": "VERB",
+    "орында": "VERB",
     
     # Сын есім түбірлері
     "қызық": "ADJ",
@@ -140,6 +146,7 @@ SUFFIX_GROUPS = {
     "verb_personal_1pl": ["мыз","міз"],     # бар-ды-қ (мұнда -қ өзі көптік жақ)
     "converb": ["ып","іп","п"],
     "participle": ["ған","ген","қан","кен"],
+    "infinitive_u": ["у"],
 }
 CASE_MAP = {
     # Ілік септік
@@ -190,6 +197,11 @@ def detect_category(pos, suffixes):
 
     # 1) ЕТІСТІК болса: "ды/ді/ты/ті" — септік емес, етістік форманты!
     if pos == "VERB":
+       if "у" in suffixes:
+           categories.append("Тұйық етістік")
+       if any(x in suffixes for x in ["да","де","та","те"]):
+           categories.append("Жатыс септік")
+    
         # ауыспалы осы шақ (3-жақ): ұна-й-ды / бар-а-ды / кел-е-ді
         if any(x in suffixes for x in ["й", "а", "е"]) and any(x in suffixes for x in ["ды", "ді"]):
             categories.append("Ауыспалы осы шақ (3-жақ)")
@@ -540,6 +552,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
