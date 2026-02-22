@@ -224,20 +224,18 @@ def layered_split(word: str, dictionary: dict):
     changed = True
     while changed:
         changed = False
+        
         if w in dictionary:
             break
 
         for suf in suffixes:
             if w.endswith(suf) and len(w) > len(suf) + 1:
-                # кесіп көреміз
                 cand = w[:-len(suf)]
-
-                # Қосымшаны алып тастай береміз (cand сөздікте болмаса да)
                 w = cand
                 found.insert(0, suf)
                 changed = True
                 break
-    # 🔥 Нормализация (ұнай → ұна)
+    # 🔥 НОРМАЛИЗАЦИЯ — while БІТКЕННЕН КЕЙІН
     if w.endswith("й"):
         w = w[:-1]
 
@@ -416,6 +414,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
