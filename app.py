@@ -364,7 +364,11 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
         if items[index + 1]["pos"] == "NOUN":
             return "Анықтауыш"
     # Егер соңғы етістіктің алдында тұрған зат есім болса → бастауыш
-    if pos == "NOUN" and index == last_verb_index - 1:
+    if (
+        pos == "NOUN"
+        and index == last_verb_index - 1:
+        and "DAT" not in suffixes_found
+    ):
         return "Бастауыш" 
 
     # Егер DAT болса — толықтауыш (маған/саған/оған)
@@ -384,7 +388,7 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
         return "Пысықтауыш"
 
     # Толықтауыш — табыс/барыс септік
-    object_suffixes = {"ны", "ні", "ға", "ге", "қа", "ке", "DAT"}
+    object_suffixes = {"ны", "ні", "ға", "ге", "қа", "ке",}
     if any(s in object_suffixes for s in suffixes_found):
         return "Толықтауыш"
 
@@ -448,6 +452,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
