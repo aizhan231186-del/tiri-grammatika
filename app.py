@@ -238,25 +238,27 @@ def layered_split(word: str, dictionary: dict):
     changed = True
     while changed:
         changed = False
-        
+
         if w in dictionary:
             break
 
-    for suf in suffixes:
-        if w.endswith(suf) and len(w) > len(suf) + 1:
-            cand = w[:-len(suf)]
+        for suf in suffixes:
+            if w.endswith(suf) and len(w) > len(suf) + 1:
+                cand = w[:-len(suf)]
 
-        # 🔥 қ/к -> ғ/г болып өзгергендерін кері қайтару
-        if suf in ("ы", "і"):
-           if cand.endswith("ғ"):
-            cand = cand[:-1] + "қ"
-           elif cand.endswith("г"):
-              cand = cand[:-1] + "к"
-         w = cand
-         found.insert(0, suf)
-         changed = True
-         break
-    # 🔥 НОРМАЛИЗАЦИЯ — while БІТКЕННЕН КЕЙІН
+                # 🔥 қ/к -> ғ/г болып өзгергенін кері қайтару (көбіне тәуелдік: ы/і)
+                if suf in ("ы", "і"):
+                    if cand.endswith("ғ"):
+                        cand = cand[:-1] + "қ"
+                    elif cand.endswith("г"):
+                        cand = cand[:-1] + "к"
+
+                w = cand
+                found.insert(0, suf)
+                changed = True
+                break
+
+    # 🔥 Нормализация — while БІТКЕННЕН КЕЙІН
     if w.endswith("й"):
         w = w[:-1]
 
@@ -435,6 +437,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
