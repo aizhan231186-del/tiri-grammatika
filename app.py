@@ -485,18 +485,18 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
         if items[index + 1]["pos"] == "NOUN":
             return "Анықтауыш"
     # Егер соңғы етістіктің алдында тұрған зат есім болса → бастауыш
-    if (
-        pos == "NOUN"
-        and index == last_verb_index - 1
-        and not any(s in DATIVE_FORMS for s in suffixes_found)
-    ):
-        return "Бастауыш" 
+    # if (
+    #     pos == "NOUN"
+    #     and index == last_verb_index - 1
+    #     and not any(s in DATIVE_FORMS for s in suffixes_found)
+    # ):
+    #     return "Бастауыш" 
 
     # Егер DAT болса — толықтауыш (маған/саған/оған)
     
     # Бастауыш — сөйлем басындағы есімдік/зат есім (DAT болмасын)
-    if index == 0 and pos in ("PRON", "NOUN", "PROPN") and "DAT" not in suffixes_found:
-        return "Бастауыш"  
+    # if index == 0 and pos in ("PRON", "NOUN", "PROPN") and "DAT" not in suffixes_found:
+    #     return "Бастауыш"  
 
     # Сын есім зат есімнің алдында тұрса -> анықтауыш (қорғаныс: index+1 шектен аспасын)
     if pos == "ADJ" and index + 1 < len(items):
@@ -574,6 +574,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
