@@ -383,8 +383,8 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
         return "NUM"
     # 🔥 Предикатив сөздер
     if root in ("бар", "жоқ"):
-    return "PRED"    
-    """Сөз табын жуықтау"""
+        return "PRED"    
+    # Сөз табын жуықтау
 
     if root in DICTIONARY:
         return DICTIONARY[root]
@@ -602,6 +602,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
