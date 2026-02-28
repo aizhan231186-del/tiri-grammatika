@@ -588,14 +588,14 @@ if text:
             pos = "VERB"
     feats = extract_features(pos, root, surfs)
 
-        analysis.append({
+    analysis.append({
             "orig": w,
             "root": root,
             "suffixes": sufs,
             "pos": pos,
             "feats": feats, 
             "has_comma": has_comma,
-        })
+    })
     last_verb_index = find_last_verb_index(analysis)
 
     table = []
@@ -628,6 +628,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
