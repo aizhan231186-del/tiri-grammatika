@@ -485,7 +485,7 @@ def find_last_verb_index(items: list[dict]) -> int:
             idx = i
     return idx
 def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
-    # 🔥 Қаратпа сөз (сөйлемнің бірінші сөзі және үтірмен келген)
+    # 0-индекстегі және соңында үтірі бар сөз -> қаратпа сөз
     if index == 0 and items[index].get("has_comma"):
         return "Қаратпа сөз"
     
@@ -617,6 +617,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
