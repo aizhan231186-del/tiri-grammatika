@@ -381,6 +381,9 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     # 🔥 Егер түбір сан есім болса
     if root in NUMERALS:
         return "NUM"
+    # 🔥 Предикатив сөздер
+    if root in ("бар", "жоқ"):
+    return "PRED"    
     """Сөз табын жуықтау"""
 
     if root in DICTIONARY:
@@ -406,8 +409,17 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     if any(s in ["п","ып","іп"] for s in sufs):
         return "VERB"
     return "UNKNOWN"
-    def extract_features(pos: str, suffixes: list[str]) -> dict:
+    def extract_features(pos: str, root: suffixes: list[str]) -> dict:
         feats = {}
+        {}
+
+        # 🔥 Предикативтер (бар/жоқ)
+        if root == "бар":
+            feats["PredType"] = "Exist"
+            return feats
+        elif root == "жоқ":
+            feats["PredType"] = "Absent"
+            return feats
 
         # NOUN features
         if pos == "NOUN":
@@ -590,6 +602,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
