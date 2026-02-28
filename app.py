@@ -117,6 +117,7 @@ POS_KZ = {
     "PROPN": "Жалқы есім",
     "INTJ": "Одағай",
     "UNKNOWN": "Белгісіз",
+    "PRED": "Предекатив сөз",
 }
  # ==============================
 # КӘСІБИ MORPHO SUFFIX ARCHITECTURE
@@ -477,7 +478,7 @@ def find_last_verb_index(items: list[dict]) -> int:
     """Сөйлемдегі соңғы етістік индексін табу"""
     idx = -1
     for i, it in enumerate(items):
-        if it["pos"] == "VERB":
+        if it["pos"] in ("VERB","PRED"):
             idx = i
     return idx
 def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
@@ -603,6 +604,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
