@@ -408,7 +408,7 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     # Көсемше -> етістік (ойнап/оқып/келіп)
     if any(s in ["п","ып","іп"] for s in sufs):
         return "VERB"
-    return "UNKNOWN"
+        return "UNKNOWN"
     
     def extract_features(pos: str, root: suffixes: list[str]) -> dict:
         feats = {}
@@ -603,6 +603,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
