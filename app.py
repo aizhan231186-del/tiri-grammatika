@@ -98,6 +98,8 @@ DICTIONARY = {
     "бол": "VERB",
     "ойна": "VERB",
     "орында": "VERB",
+    "бар": "VERB",
+    "жоқ": "PRED",
     
     # Сын есім түбірлері
     "қызық": "ADJ",
@@ -383,9 +385,6 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     # 🔥 Егер түбір сан есім болса
     if root in NUMERALS:
         return "NUM"
-    # 🔥 Предикатив сөздер
-    if root in ("бар", "жоқ"):
-        return "PRED"    
     # Сөз табын жуықтау
 
     if root in DICTIONARY:
@@ -574,8 +573,21 @@ if text:
         has_comma = w.endswith(",")
         clean_w = normalize_word(w)
         root, sufs = layered_split(clean_w, DICTIONARY)
-        pos = guess_pos(root, sufs)
-        feats = extract_features(pos, sufs)   
+        pos = guess_pos(root, suffixes_found)
+        feats = extract_features(pos, sufs)
+    # БАР сөзін контекстпен түзету
+    if root == "бар":
+        if idx > 0 and analysis[idx-1]["feats"] == "Барыс септік":
+            pos = "VERB"
+        else:
+            pos = "PRED"
+
+    # ТҰР/ЖАТЫР
+    if root in ["тұр","жатыр","отыр","жүр"]:
+        if idx > 0 and "Көсемше" in analysis[idx-1]["feats"]:
+            pos = "AUX"
+        else:
+            pos = "VERB"
 
         analysis.append({
             "orig": w,
@@ -617,6 +629,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
