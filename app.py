@@ -79,6 +79,7 @@ DICTIONARY = {
     "әдебиет": "NOUN",
     "кітап": "NOUN",
     "тапсырма": "NOUN",
+    "дүкен": "NOUN",
 
     # Жалқы есімдер (мысал)
     "алматы": "PROPN",
@@ -484,6 +485,10 @@ def find_last_verb_index(items: list[dict]) -> int:
             idx = i
     return idx
 def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
+    # 🔥 Қаратпа сөз (сөйлемнің бірінші сөзі және үтірмен келген)
+    if index == 0 and items[index].get("has_comma"):
+        return "Қаратпа сөз"
+    
     # ✅ Предикатив сөз → баяндауыш
     if pos == "PRED":
         return "Баяндауыш"
@@ -565,8 +570,10 @@ if text:
     analysis = []
 
     # Әр сөзді талдау
-    for w in raw_words:
-        root, sufs = layered_split(w, DICTIONARY)
+    for idx, w in enumerate(raw_words):
+        has_comma = w.endswith(",")
+        clean_w = normalize_word(w)
+        root, sufs = layered_split(clean_w, DICTIONARY)
         pos = guess_pos(root, sufs)
         feats = extract_features(pos, sufs)   
 
@@ -575,7 +582,8 @@ if text:
             "root": root,
             "suffixes": sufs,
             "pos": pos,
-            "feats": feats,                  
+            "feats": feats, 
+            "has_comma": has_comma,
         })
     last_verb_index = find_last_verb_index(analysis)
 
@@ -609,6 +617,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
