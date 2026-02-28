@@ -555,8 +555,6 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
         return "Пысықтауыш"
 
     return "Белгісіз"
-def extract_features(pos, sufs):
-    return {}
 
 # =========================================================
 # UI
@@ -588,7 +586,7 @@ if text:
             pos = "AUX"
         else:
             pos = "VERB"
-    feats = extract_features(pos, surfs)
+    feats = extract_features(pos, root, surfs)
 
         analysis.append({
             "orig": w,
@@ -630,6 +628,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
