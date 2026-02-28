@@ -399,29 +399,31 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     if any(s in verb_like for s in suffixes_found):
         return "VERB"
     # Көптік жалғау -> зат есім
-    if any(s in ["лар","лер","дар","дер","тар","тер"] for s in sufs):
+    if any(s in ["лар","лер","дар","дер","тар","тер"] for s in suffixes_found):
         return "NOUN"
 
     # Жатыс септік -> көбіне зат есім (далада, мектепте)
-    if any(s in ["да","де","та","те"] for s in sufs):
+    if any(s in ["да","де","та","те"] for s in suffixes_found):
         return "NOUN"
 
     # Көсемше -> етістік (ойнап/оқып/келіп)
-    if any(s in ["п","ып","іп"] for s in sufs):
+    if any(s in ["п","ып","іп"] for s in suffixes_found):
         return "VERB"
-        return "UNKNOWN"
+        
+    return "UNKNOWN"
     
-    def extract_features(pos: str, root: suffixes):
+    from typing import List, Dict
+    def extract_features(pos: str, root: str, suffixes: List[str]) -> Dict:
         feats = {}
-        {}
-
+        
         # 🔥 Предикативтер (бар/жоқ)
-        if root == "бар":
-            feats["PredType"] = "Exist"
-            return feats
-        elif root == "жоқ":
-            feats["PredType"] = "Absent"
-            return feats
+        if pos =="PRED":
+            if root == "бар":
+                feats["PredType"] = "Exist"
+            elif root == "жоқ":
+                feats["PredType"] = "Absent"
+        # ... ары қарай басқа NOUN/VERB шарттарың осында жалғасады ...
+        return feats
 
         # NOUN features
         if pos == "NOUN":
@@ -607,6 +609,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
