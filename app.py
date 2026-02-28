@@ -575,14 +575,14 @@ if text:
         
     # БАР сөзін контекстпен түзету
     if root == "бар":
-        if idx > 0 and analysis[idx-1]["feats"] == "Барыс септік":
+        if analysis and analysis[-1]["feats"] == "Барыс септік":
             pos = "VERB"
         else:
             pos = "PRED"
 
     # ТҰР/ЖАТЫР/ОТЫР/ЖҮР
     if root in ["тұр","жатыр","отыр","жүр"]:
-        if idx > 0 and "Көсемше" in analysis[idx-1]["feats"]:
+        if analysis and "Көсемше" in analysis[-1]["feats"]:
             pos = "AUX"
         else:
             pos = "VERB"
@@ -628,6 +628,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
