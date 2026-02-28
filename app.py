@@ -573,8 +573,8 @@ if text:
         has_comma = w.endswith(",")
         clean_w = normalize_word(w)
         root, sufs = layered_split(clean_w, DICTIONARY)
-        pos = guess_pos(root, suffixes_found)
-        feats = extract_features(pos, sufs)
+        pos = guess_pos(root, sufs)
+        
     # БАР сөзін контекстпен түзету
     if root == "бар":
         if idx > 0 and analysis[idx-1]["feats"] == "Барыс септік":
@@ -582,12 +582,13 @@ if text:
         else:
             pos = "PRED"
 
-    # ТҰР/ЖАТЫР
+    # ТҰР/ЖАТЫР/ОТЫР/ЖҮР
     if root in ["тұр","жатыр","отыр","жүр"]:
         if idx > 0 and "Көсемше" in analysis[idx-1]["feats"]:
             pos = "AUX"
         else:
             pos = "VERB"
+    feats = extract_features(pos, surfs)
 
         analysis.append({
             "orig": w,
@@ -629,6 +630,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
