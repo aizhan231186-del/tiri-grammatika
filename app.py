@@ -482,6 +482,9 @@ def find_last_verb_index(items: list[dict]) -> int:
             idx = i
     return idx
 def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index: int, items: list[dict]) -> str:
+    # ✅ Предикатив сөз → баяндауыш
+    if pos == "PRED":
+        return "Баяндауыш"
     # Баяндауыш — соңғы етістік
     if pos == "VERB" and index == last_verb_index:
         return "Баяндауыш"
@@ -604,6 +607,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
