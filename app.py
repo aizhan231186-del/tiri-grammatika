@@ -604,29 +604,29 @@ if text:
         root, sufs = layered_split(clean_w, DICTIONARY)
         pos = guess_pos(root, sufs)
         
-    # БАР сөзін контекстпен түзету
-    if root == "бар":
-        if analysis and analysis[-1]["feats"] == "Барыс септік":
-            pos = "VERB"
-        else:
-            pos = "PRED"
+        # БАР сөзін контекстпен түзету
+        if root == "бар":
+            if analysis and analysis[-1]["feats"] == "Барыс септік":
+                pos = "VERB"
+            else:
+                pos = "PRED"
 
-    # ТҰР/ЖАТЫР/ОТЫР/ЖҮР
-    if root in ["тұр","жатыр","отыр","жүр"]:
-        if analysis and "Көсемше" in analysis[-1]["feats"]:
-            pos = "AUX"
-        else:
-            pos = "VERB"
-    feats = extract_features(pos, sufs)
+        # ТҰР/ЖАТЫР/ОТЫР/ЖҮР
+        if root in ["тұр","жатыр","отыр","жүр"]:
+            if analysis and "Көсемше" in analysis[-1]["feats"]:
+                pos = "AUX"
+            else:
+                pos = "VERB"
+        feats = extract_features(pos, sufs)
 
-    analysis.append({
+        analysis.append({
             "orig": w,
             "root": root,
             "suffixes": sufs,
             "pos": pos,
             "feats": feats, 
             "has_comma": has_comma,
-    })
+        })
     last_verb_index = find_last_verb_index(analysis)
 
     table = []
@@ -659,6 +659,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
