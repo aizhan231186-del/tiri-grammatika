@@ -131,6 +131,7 @@ DICTIONARY = {
     "орында": "VERB",
     "бар": "VERB",
     "жоқ": "PRED",
+    "дайындал": "VERB",
     
     # Сын есім түбірлері
     "қызық": "ADJ",
@@ -603,6 +604,9 @@ if text:
         clean_w = normalize_word(w)
         root, sufs = layered_split(clean_w, DICTIONARY)
         pos = guess_pos(root, sufs)
+
+        if root == "жақсы":
+           pos = "ADV" 
         
         # БАР сөзін контекстпен түзету
         if root == "бар":
@@ -659,6 +663,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
