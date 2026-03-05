@@ -617,7 +617,7 @@ if text:
             pos = "AUX"
         else:
             pos = "VERB"
-    feats = extract_features(pos, surfs)
+    feats = extract_features(pos, sufs)
 
     analysis.append({
             "orig": w,
@@ -659,6 +659,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
