@@ -1,6 +1,37 @@
 import streamlit as st
 import re
 
+def extract_features(pos, sufs):
+    feats = {}
+
+    if pos == "PRED":
+        feats["Pred"] = "Yes"
+
+    if pos == "NOUN":
+        if any(s in ["лар","лер","дар","дер","тар","тер"] for s in sufs):
+            feats["Number"] = "Plur"
+
+        if any(s in ["ның","нің","дың","дің","тың","тің"] for s in sufs):
+            feats["Case"] = "Gen"
+
+        elif any(s in ["ға","ге","қа","ке"] for s in sufs):
+            feats["Case"] = "Dat"
+
+        elif any(s in ["ны","ні","ды","ді","ты","ті"] for s in sufs):
+            feats["Case"] = "Acc"
+
+        elif any(s in ["да","де","та","те"] for s in sufs):
+            feats["Case"] = "Loc"
+
+        elif any(s in ["дан","ден","тан","тен"] for s in sufs):
+            feats["Case"] = "Abl"
+
+    if pos == "VERB":
+        if any(s in ["ды","ді","ты","ті"] for s in sufs):
+            feats["Tense"] = "Past"
+
+    return feats
+
 st.title("Тірі грамматика")
 
 # =========================================================
@@ -628,6 +659,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
