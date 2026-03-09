@@ -309,7 +309,7 @@ def normalize_word(w: str) -> str:
     w = w.strip()
     if w in ["—","-"]:
         return "" 
-    w = re.sub(r"[^а-z-яәіңғүұқөһ]", "", w)  # қазақ әріптерін сақтаймыз
+    w = re.sub(r"[^a-zA-Zа-яА-ЯәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)# қазақ әріптерін сақтаймыз
     return w.lower()
 def layered_split(word: str, dictionary: dict):
     """Түбір + қосымшаны қабаттап бөлу (аралық формалар сөздікте болмаса да кеседі)."""
@@ -710,6 +710,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
