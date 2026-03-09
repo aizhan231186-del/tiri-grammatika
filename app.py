@@ -1,6 +1,13 @@
 import streamlit as st
 import re
 
+def detect_predicate(analysis):
+    for i in range(len(analysis)-1, -1, -1):
+        if analysis[i]["pos"] == "VERB":
+            analysis[i]["sentence_role"] = "Баяндауыш"
+            return i
+    return -1
+
 def extract_features(pos, sufs):
     feats = {}
 
@@ -631,6 +638,14 @@ if text:
             "feats": feats, 
             "has_comma": has_comma,
         })
+        predicate_index = detect_predicate(analysis)
+
+        if predicate_index != -1:
+            for i in range(predicate_index):
+                if analysis[i]["pos"] == "NOUN":
+                    analysis[i]["sentence_role"] = "Бастауыш"
+                    break
+        
         # Сызықшалы сөйлемді тексеру
         if "—" in text or "-" in text:
             if analysis:
@@ -669,6 +684,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
