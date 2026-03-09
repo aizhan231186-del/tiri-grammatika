@@ -634,7 +634,7 @@ if text:
     # Әр сөзді талдау
     for idx, w in enumerate(raw_words):
         if w in ["—", "-", "–"]:
-        continue
+            continue
         has_comma = w.endswith(",")
         clean_w = normalize_word(w)
         root, sufs = layered_split(clean_w, DICTIONARY)
@@ -713,6 +713,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
