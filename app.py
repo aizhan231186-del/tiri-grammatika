@@ -3,7 +3,7 @@ import re
 
 def detect_predicate(analysis):
     for i in range(len(analysis)-1, -1, -1):
-        if analysis[i]["pos"] == "VERB":
+        if analysis[i]["pos"] in ["VERB", "NOUN", "ADJ"]:
             analysis[i]["sentence_role"] = "Баяндауыш"
             return i
     return -1
@@ -302,6 +302,8 @@ DICTIONARY.update({
 def normalize_word(w: str) -> str:
     """Тыныс белгілерін алып, төменгі регистрге түсіру"""
     w = w.strip()
+    if w in ["—","-"]:
+        return "" 
     w = re.sub(r"[^\wәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)  # қазақ әріптерін сақтаймыз
     return w.lower()
 def layered_split(word: str, dictionary: dict):
@@ -684,6 +686,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
