@@ -307,8 +307,9 @@ DICTIONARY.update({
 def normalize_word(w: str) -> str:
     """Тыныс белгілерін алып, төменгі регистрге түсіру"""
     w = w.strip()
-    if w in ["—","-"]:
-        return "" 
+    if w in ["—", "-", "–"]:
+        return ""
+        
     w = re.sub(r"[^a-zA-Zа-яА-ЯәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)# қазақ әріптерін сақтаймыз
     return w.lower()
 def layered_split(word: str, dictionary: dict):
@@ -632,6 +633,8 @@ if text:
 
     # Әр сөзді талдау
     for idx, w in enumerate(raw_words):
+        if w in ["—", "-", "–"]:
+        continue
         has_comma = w.endswith(",")
         clean_w = normalize_word(w)
         root, sufs = layered_split(clean_w, DICTIONARY)
@@ -710,6 +713,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
