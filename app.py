@@ -118,7 +118,11 @@ DICTIONARY = {
     "кітап": "NOUN",
     "тапсырма": "NOUN",
     "дүкен": "NOUN",
+    "көктем": "NOUN",
+    "жыл": "NOUN",
+    "мезгіл": "NOUN",
 
+}
     # Жалқы есімдер (мысал)
     "алматы": "PROPN",
     "астана": "PROPN",
@@ -144,6 +148,8 @@ DICTIONARY = {
     "қызық": "ADJ",
     "қатты": "ADJ",
     "жұмсақ": "ADJ",
+    "тамаша": "ADJ",
+    "ең": "ADV"
  }
 POS_KZ = {
     "NOUN": "Зат есім",
@@ -304,7 +310,7 @@ def normalize_word(w: str) -> str:
     w = w.strip()
     if w in ["—","-"]:
         return "" 
-    w = re.sub(r"[^\wәіңғүұқөһӘІҢҒҮҰҚӨҺ-]", "", w)  # қазақ әріптерін сақтаймыз
+    w = re.sub(r"[^\wәіңғүұқөһӘІҢҒҮҰҚӨҺ]", "", w)  # қазақ әріптерін сақтаймыз
     return w.lower()
 def layered_split(word: str, dictionary: dict):
     """Түбір + қосымшаны қабаттап бөлу (аралық формалар сөздікте болмаса да кеседі)."""
@@ -442,6 +448,24 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     # Көптік жалғау -> зат есім
     if any(s in ["лар","лер","дар","дер","тар","тер"] for s in suffixes_found):
         return "NOUN"
+
+    def detect_subject_predicate(analysis):
+
+        predicate_index = -1
+        for i, w in enumerate(analysis):
+            if w["pos"] in ["VERB","PRED"]:
+                predicate_index = i
+                break
+
+        if predicate_index == -1:
+            predicate_index = len(analysis) - 1
+
+        analysis[predicate_index]["sentence_role"] = "Баяндауыш"
+
+        for i in range(predicate_index):
+            if analysis[i]["pos"] == "NOUN":
+                analysis[i]["sentence_role"] = "Бастауыш"
+                break
 
     # Жатыс септік -> көбіне зат есім (далада, мектепте)
     if any(s in ["да","де","та","те"] for s in suffixes_found):
@@ -643,6 +667,7 @@ if text:
         predicate_index = detect_predicate(analysis)
 
         if predicate_index != -1:
+            analysis[predicate_index]["sentence_role"] = "Баяндауыш"
             for i in range(predicate_index):
                 if analysis[i]["pos"] == "NOUN":
                     analysis[i]["sentence_role"] = "Бастауыш"
@@ -686,6 +711,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
