@@ -242,6 +242,11 @@ def format_suffixes(suffixes):
 
 def detect_category(pos, suffixes):
     categories = []
+    
+    # Зат есім септіктері
+    if pos == "NOUN":
+        if any(x in suffixes for x in ["дың","дің","тың","тің","ның","нің"]):
+            categories.append("Ілік септік")
 
     # 1) Егер ЕТІСТІК болса: "ды/ді/ты/ті" — септік емес, етістік форманты!
     if pos == "VERB":
@@ -449,6 +454,9 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
     if any(s in ["лар","лер","дар","дер","тар","тер"] for s in suffixes_found):
         return "NOUN"
 
+    if root == "ең":
+        return "PART"
+
     def detect_subject_predicate(analysis):
 
         predicate_index = -1
@@ -462,6 +470,26 @@ def guess_pos(root: str, suffixes_found: list[str]) -> str:
 
         analysis[predicate_index]["sentence_role"] = "Баяндауыш"
 
+        for i in range(predicate_index):
+            if analysis[i]["pos"] == "NOUN":
+                analysis[i]["sentence_role"] = "Бастауыш"
+                break
+
+        # баяндауышты табу
+        predicate_index = -1
+
+        for i, w in enumerate(analysis):
+            if w["pos"] in ["VERB","PRED"]:
+                predicate_index = i
+                break
+
+        # егер етістік болмаса соңғы сөз баяндауыш
+        if predicate_index == -1:
+            predicate_index = len(analysis) - 1
+
+        analysis[predicate_index]["sentence_role"] = "Баяндауыш"
+
+        # бастауыш
         for i in range(predicate_index):
             if analysis[i]["pos"] == "NOUN":
                 analysis[i]["sentence_role"] = "Бастауыш"
@@ -713,6 +741,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
