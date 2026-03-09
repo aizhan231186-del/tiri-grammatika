@@ -631,7 +631,13 @@ if text:
             "feats": feats, 
             "has_comma": has_comma,
         })
-    last_verb_index = find_last_verb_index(analysis)
+        # Сызықшалы сөйлемді тексеру
+        if "—" in text or "-" in text:
+            if analysis:
+                analysis[0]["role"] = "Бастауыш"
+                analysis[-1]["role"] = "Баяндауыш"
+                
+        last_verb_index = find_last_verb_index(analysis)
 
     table = []
     for i, it in enumerate(analysis):
@@ -663,6 +669,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
