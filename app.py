@@ -1,6 +1,9 @@
 import streamlit as st
 import re
 
+import streamlit as st
+import re
+
 st.set_page_config(
     page_title="Tamyr – Тірі грамматика",
     page_icon="✍️",
@@ -9,40 +12,115 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-body {
-    background: #0f0f14;
-}
-
-.main {
-    background-color: #0f0f14;
-}
-
-h1, h2, h3 {
+.stApp {
+    background: linear-gradient(180deg, #0b0b12 0%, #12121c 100%);
     color: white;
 }
 
-.stTextInput>div>div>input {
-    background-color: #1c1c26;
-    color: white;
-    border-radius: 12px;
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 1100px;
 }
 
-.stButton>button {
-    background: linear-gradient(135deg,#6a11cb,#2575fc);
+h1, h2, h3, p, label {
+    color: white !important;
+}
+
+.main-title {
+    font-size: 58px;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 10px;
     color: white;
-    border-radius: 12px;
-    padding: 10px 18px;
-    border: none;
+}
+
+.sub-title {
+    color: #cfcfe6 !important;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.hero-box {
+    background: linear-gradient(135deg, rgba(106,17,203,0.95) 0%, rgba(37,117,252,0.95) 100%);
+    border-radius: 28px;
+    padding: 34px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.40);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 28px;
+}
+
+.input-card {
+    background: #171722;
+    border: 1px solid #2c2c3a;
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    margin-top: 10px;
+}
+
+.stTextInput input {
+    background: #0f1020 !important;
+    color: white !important;
+    border-radius: 16px !important;
+    border: 1px solid #35354a !important;
+    padding: 16px !important;
+    font-size: 18px !important;
+}
+
+.stTextInput input::placeholder {
+    color: #9b9bb3 !important;
+}
+
+.stButton > button {
+    background: linear-gradient(135deg,#ff512f,#dd2476) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 12px 24px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25) !important;
 }
 
 .result-box {
-    background: #181822;
-    padding: 20px;
-    border-radius: 14px;
-    border: 1px solid #2a2a35;
+    background: #171722;
+    padding: 24px;
+    border-radius: 22px;
+    border: 1px solid #2c2c3a;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    margin-top: 24px;
+}
+
+.result-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: white;
+}
+
+div[data-testid="stToolbar"] {
+    visibility: hidden;
+    height: 0%;
+    position: fixed;
+}
+
+header, footer {
+    visibility: hidden;
 }
 </style>
 """, unsafe_allow_html=True)
+
+st.markdown("""
+<div class="hero-box">
+    <div class="main-title">✍️ Тірі грамматика</div>
+    <div class="sub-title">
+        Сөйлемді енгізіңіз — жүйе оны интерактивті түрде талдайды
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="input-card">', unsafe_allow_html=True)
 
 def detect_predicate(analysis):
     for i in range(len(analysis)-1, -1, -1):
@@ -695,11 +773,12 @@ def guess_role(pos: str, suffixes_found: list[str], index: int, last_verb_index:
 # =========================================================
 # UI
 # =========================================================
-text = st.text_input("Сөйлем жазыңыз:")
-
-if text:
-    st.write("Сіз жаздыңыз:", text)
-    raw_words = text.split()
+st.markdown('<div class="input-card">', unsafe_allow_html=True)
+sentence = st.text_input("Сөйлем жазыңыз:", placeholder="Мысалы: Абай өлең жазды.")
+st.markdown('</div>', unsafe_allow_html=True)
+if sentence:
+    st.write("Сіз жаздыңыз:", sentence)
+    raw_words = sentence.split()
     analysis = []
 
     # Әр сөзді талдау
@@ -784,6 +863,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
