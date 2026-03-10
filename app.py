@@ -826,7 +826,7 @@ if sentence:
                     break
         
         # Сызықшалы сөйлемді тексеру
-        if "—" in text or "-" in text:
+        if "—" in sentence or "-" in sentence:
             if analysis:
                 analysis[0]["role"] = "Бастауыш"
                 analysis[-1]["role"] = "Баяндауыш"
@@ -863,6 +863,7 @@ if sentence:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
