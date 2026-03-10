@@ -1,6 +1,49 @@
 import streamlit as st
 import re
 
+st.set_page_config(
+    page_title="Tamyr – Тірі грамматика",
+    page_icon="✍️",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+body {
+    background: #0f0f14;
+}
+
+.main {
+    background-color: #0f0f14;
+}
+
+h1, h2, h3 {
+    color: white;
+}
+
+.stTextInput>div>div>input {
+    background-color: #1c1c26;
+    color: white;
+    border-radius: 12px;
+}
+
+.stButton>button {
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color: white;
+    border-radius: 12px;
+    padding: 10px 18px;
+    border: none;
+}
+
+.result-box {
+    background: #181822;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #2a2a35;
+}
+</style>
+""", unsafe_allow_html=True)
+
 def detect_predicate(analysis):
     for i in range(len(analysis)-1, -1, -1):
         if analysis[i]["pos"] in ["VERB", "NOUN", "ADJ"]:
@@ -741,6 +784,7 @@ if text:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
