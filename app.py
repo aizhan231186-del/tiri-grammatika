@@ -9,7 +9,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.stApp {
+[data-testid="stAppViewContainer"] {
     background: linear-gradient(180deg, #0b0b12 0%, #12121c 100%);
     color: white;
 }
@@ -860,6 +860,7 @@ if sentence:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
