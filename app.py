@@ -1,9 +1,6 @@
 import streamlit as st
 import re
 
-import streamlit as st
-import re
-
 st.set_page_config(
     page_title="Tamyr – Тірі грамматика",
     page_icon="✍️",
@@ -863,6 +860,7 @@ if sentence:
             st.warning(f"'{it['orig']}' → түбірі '{it['root']}' (сөздікте жоқ)")
 
         st.info("Кеңес: төмендегі DICTIONARY ішіне осы түбірлерді қосып көріңіз.")
+
 
 
 
